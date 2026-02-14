@@ -1,0 +1,48 @@
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "./userSlice";
+
+function UserProfile() {
+  const dispatch = useDispatch();
+  const { data, isLoading, error } = useSelector((state) => state.user);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white shadow-lg rounded-xl p-6 w-80 text-center">
+        <h2 className="text-xl font-semibold mb-4">User Profile</h2>
+
+        <button
+          onClick={() => dispatch(fetchUser())}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200"
+        >
+          Get User
+        </button>
+
+        {isLoading && (
+          <p className="mt-4 text-gray-600 animate-pulse">
+            Loading...
+          </p>
+        )}
+
+        {error && (
+          <p className="mt-4 text-red-500 font-medium">
+            Error: {error}
+          </p>
+        )}
+
+        {data && (
+          <div className="mt-4">
+            <p className="text-lg font-medium text-gray-800">
+              {data.firstName} {data.lastName}
+            </p>
+            <p className="text-sm text-gray-500">
+              {data.email}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default UserProfile;
