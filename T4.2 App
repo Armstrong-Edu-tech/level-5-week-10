@@ -1,0 +1,55 @@
+import React, { useState } from 'react';
+import { useGetPostsQuery, useAddPostMutation } from './features/api/apiSlice';
+
+function PostsList() {
+  const { data, isLoading, isError } = useGetPostsQuery();
+  const [addPost] = useAddPostMutation();
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+
+  const posts = data?.posts || [];
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error fetching posts</p>;
+
+  const handleAddPost = async () => {
+    if (!title || !body) return alert('Enter title and body!');
+    await addPost({ title, body });
+    setTitle('');
+    setBody('');
+  };
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h1>Posts</h1>
+
+      <div style={{ marginBottom: '20px' }}>
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Body"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+        />
+        <button onClick={handleAddPost}>Add Post</button>
+      </div>
+
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>
+            <b>{post.title}</b>: {post.body}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default function App() {
+  return <PostsList />;
+}
