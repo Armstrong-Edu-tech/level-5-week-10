@@ -1,0 +1,31 @@
+import { useSelector } from "react-redux";
+
+const CartSummary = () => {
+  const { totalQuantity, totalPrice } = useSelector(
+    (state) => state.cart
+  );
+
+  return (
+    <div className="bg-white shadow-md rounded-lg p-4 w-full max-w-sm mx-auto mt-6">
+      <h3 className="text-xl font-bold mb-4 text-center">
+        Cart Summary
+      </h3>
+
+      <div className="flex justify-between mb-2">
+        <span className="text-gray-600">Total Items:</span>
+        <span className="font-semibold">
+          {totalQuantity}
+        </span>
+      </div>
+
+      <div className="flex justify-between">
+        <span className="text-gray-600">Total Price:</span>
+        <span className="font-bold text-green-600">
+          ${totalPrice.toFixed(2)}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+export default CartSummary;
