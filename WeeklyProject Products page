@@ -1,0 +1,62 @@
+import { useGetProductsQuery } from "../features/productsApi";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cartSlice";
+
+const Products = () => {
+  const { data, isLoading, error } = useGetProductsQuery();
+  const dispatch = useDispatch();
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-screen text-xl font-semibold">
+        Loading products...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="flex justify-center items-center h-screen text-red-600 text-xl">
+        Error loading products
+      </div>
+    );
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h2 className="text-3xl font-bold text-center mb-8">
+        Products
+      </h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {data.map((product) => (
+          <div
+            key={product.id}
+            className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between hover:shadow-lg transition duration-300"
+          >
+            <img
+              src={product.image}
+              alt={product.title}
+              className="h-40 object-contain mb-4"
+            />
+
+            <h4 className="font-semibold text-lg mb-2 line-clamp-2">
+              {product.title}
+            </h4>
+
+            <p className="text-green-600 font-bold mb-4">
+              ${product.price}
+            </p>
+
+            <button
+              onClick={() => dispatch(addToCart(product))}
+              className="mt-auto bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-300"
+            >
+              Add to Cart
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Products;
